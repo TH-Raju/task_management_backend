@@ -5,8 +5,16 @@ const createTask = async function (data) {
   return result;
 };
 
+const getAllTask = async function () {
+  const result = Task.find({});
+  return result;
+};
+
+
+
 const taskService = {
   createTask,
+  getAllTask,
 };
 
 module.exports = taskService;

@@ -15,8 +15,20 @@ async function createTask(req, res) {
   }
 }
 
+async function getAllTask(req, res) {
+  const allTask = await taskService.getAllTask();
+  let data = {
+    success: true,
+    status: 200,
+    data: allTask,
+  };
+
+  res.send(data);
+}
+
 const taskController = {
   createTask,
+  getAllTask,
 };
 
 module.exports = taskController;
