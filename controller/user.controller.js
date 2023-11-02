@@ -1,0 +1,79 @@
+const User = require("../models/User");
+const userService = require("../service/userService");
+const bcrypt = require("bcrypt");
+
+let getUser = async function (req, res) {
+  const result = await userService.getUserService();
+  console.log(result);
+  if (result) {
+    let data = {
+      success: true,
+      status: 200,
+      data: result,
+    };
+    res.send(data);
+  }
+};
+
+let signUp = async function (req, res) {
+  try {
+    let newUser = await userService.createUserService(req.body);
+    // let phone = newUser.phone;
+    delete newUser.password;
+    // let SecureUser = await User.findOne({ phone: phone }).select("-password");
+    if (newUser) {
+      let data = {
+        success: true,
+        status: 200,
+        data: newUser,
+      };
+      res.send(data);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+let loginUser = async function (req, res) {
+  // console.log(req.body);
+  try {
+    let email = req.body.email;
+    let password = req.body.password;
+    let user = await User.findOne({ email: email });
+    let SecureUser = await User.findOne({ email: email }).select("-password");
+
+    // console.log(SecureUser);
+
+    if (user) {
+      let auth = await bcrypt.compare(password, user.password);
+      if (auth) {
+        let data = {
+          success: true,
+          message: "Login Successful",
+          status: 200,
+          data: SecureUser,
+        };
+        res.send(data);
+      } else {
+        let data = {
+          success: false,
+          message: "Incorrect Password",
+          status: 400,
+        };
+        res.send(data);
+      }
+    } else {
+      res.status().send(400, "User Not Exist");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const userController = {
+  getUser,
+  signUp,
+  loginUser,
+};
+
+module.exports = userController;
