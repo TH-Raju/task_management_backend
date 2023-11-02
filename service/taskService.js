@@ -10,11 +10,17 @@ const getAllTask = async function () {
   return result;
 };
 
+const deleteTask = async function (id) {
+  const result = Task.deleteOne({ _id: id });
+  return result;
+};
+
 
 
 const taskService = {
   createTask,
   getAllTask,
+  deleteTask,
 };
 
 module.exports = taskService;

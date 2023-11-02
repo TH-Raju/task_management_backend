@@ -26,9 +26,23 @@ async function getAllTask(req, res) {
   res.send(data);
 }
 
+async function deleteTask(req, res) {
+  let id = req.params.id;
+  let taskDelete = await taskService.deleteTask(id);
+
+  let data = {
+    success: true,
+    status: 200,
+    data: taskDelete,
+  };
+
+  res.send(data);
+}
+
 const taskController = {
   createTask,
   getAllTask,
+  deleteTask,
 };
 
 module.exports = taskController;
