@@ -70,13 +70,30 @@ let loginUser = async function (req, res) {
     // console.log(SecureUser);
 
     if (user) {
+      const userJwtData = {
+        name: user.name,
+        role: user.role,
+        email: user.email,
+        id: user._id,
+      };
       let auth = await bcrypt.compare(password, user.password);
       if (auth) {
+        const accessToken = createToken(
+          userJwtData,
+          config.access_secret,
+          "7d"
+        );
+
+        // console.log("ac", accessToken);
+        const tempUser = {
+          ...SecureUser.toJSON(),
+          accessToken: accessToken,
+        };
         let data = {
           success: true,
           message: "Login Successful",
           status: 200,
-          data: SecureUser,
+          data: tempUser,
         };
         res.send(data);
       } else {
