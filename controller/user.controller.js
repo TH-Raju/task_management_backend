@@ -1,6 +1,16 @@
 const User = require("../models/User");
 const userService = require("../service/userService");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("../config");
+
+const maxTime = 7 * 24 * 60 * 60;
+
+const createToken = (params, secret, expiresIn = null) => {
+  return jwt.sign({ ...params }, secret, {
+    expiresIn: expiresIn ?? maxTime,
+  });
+};
 
 let getUser = async function (req, res) {
   const result = await userService.getUserService();
@@ -22,11 +32,26 @@ let signUp = async function (req, res) {
     delete newUser.password;
     // let SecureUser = await User.findOne({ phone: phone }).select("-password");
     if (newUser) {
+      const userJwtData = {
+        name: newUser.name,
+        role: newUser.role,
+        email: newUser.email,
+        id: newUser._id,
+      };
+      const accessToken = createToken(userJwtData, config.access_secret, "7d");
+
+      // console.log("ac", accessToken);
+      const tempUser = {
+        ...newUser.toJSON(),
+        accessToken: accessToken,
+      };
+
       let data = {
         success: true,
         status: 200,
-        data: newUser,
+        data: tempUser,
       };
+
       res.send(data);
     }
   } catch (err) {
