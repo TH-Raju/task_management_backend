@@ -9,6 +9,7 @@ let createUserService = async function (data) {
   let result = await User.create(data);
   return result;
 };
+
 const userService = {
   getUserService,
   createUserService,
