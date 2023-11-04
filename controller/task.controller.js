@@ -44,7 +44,7 @@ async function updateTask(req, res) {
   let id = req.params.id;
   // console.log(id);
   let taskUpdate = await taskService.updateTask(id, datas);
-  console.log(" data ", taskUpdate);
+  // console.log(" data ", taskUpdate);
   let data = {
     success: true,
     status: 200,
