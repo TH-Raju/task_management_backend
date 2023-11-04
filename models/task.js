@@ -6,6 +6,12 @@ let taskSchema = new Schema(
     userId: {
       type: String,
     },
+    time: {
+      type: String,
+    },
+    date: {
+      type: String,
+    },
     title: {
       type: String,
     },
