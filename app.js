@@ -5,21 +5,16 @@ const cors = require("cors");
 const userRouter = require("./route/user.route");
 const taskRouter = require("./route/task.route");
 
+const corsConfig = {
+  origin: "*",
+  credentials: true,
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+};
+app.use(cors(corsConfig));
+
 app.use(json());
-app.use(cors());
+
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:3000",
-      "http://localhost:5000",
-      "https://task-manage-backend-h89xxflcl-th-raju.vercel.app",
-    ],
-    optionsSuccessStatus: 200,
-    credentials: true,
-  })
-);
 
 app.use("/api/v1", userRouter);
 app.use("/api/v1/task", taskRouter);
